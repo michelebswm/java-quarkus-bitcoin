@@ -1,4 +1,4 @@
-package model;
+package br.com.alura.model;
 
 import java.time.LocalDate;
 
