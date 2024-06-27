@@ -42,12 +42,8 @@ public class Usuario {
 
     }
 
-    public Usuario(Long id, String nome, String cpf, String username, String password) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.username = username;
-        this.password = password;
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {
