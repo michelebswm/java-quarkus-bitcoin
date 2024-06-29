@@ -1,5 +1,6 @@
 package br.com.alura.resource;
 
+import br.com.alura.exception.ApplicationServiceException;
 import br.com.alura.model.Usuario;
 import br.com.alura.service.UsuarioService;
 import jakarta.inject.Inject;
@@ -17,7 +18,7 @@ public class UsuarioResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(Usuario usuario){
+    public void create(Usuario usuario) throws ApplicationServiceException {
         usuarioService.create(usuario);
     }
 }
