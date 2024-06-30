@@ -1,11 +1,17 @@
 package br.com.alura.model;
 
+import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.security.jpa.Password;
+import io.quarkus.security.jpa.Roles;
+import io.quarkus.security.jpa.UserDefinition;
+import io.quarkus.security.jpa.Username;
 import io.smallrye.common.constraint.NotNull;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
+@UserDefinition
 @Table(
         name = "usuario",
         schema = "bitcoin",
@@ -32,11 +38,18 @@ public class Usuario {
 
     @Column(name = "username", length = 50, nullable = false)
     @NotNull
+    @Username
     private String username;
 
     @Column(name = "password", length = 100, nullable = false)
     @NotNull
+    @Password
     private String password;
+
+    @Column(name = "role", nullable = false)
+    @NotNull
+    @Roles
+    private String role;
 
     public Usuario(){
 
@@ -76,6 +89,28 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public static String passwordCripto(String password){
+        return BcryptUtil.bcryptHash(password);
+    }
+
+    public boolean checkPassword(String password){
+        return BcryptUtil.matches(password, this.password);
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public static String validaUsername(String username){
+        if(username.equals("alura")){
+            return "admin";
+        }return "user";
     }
 
     @Override
