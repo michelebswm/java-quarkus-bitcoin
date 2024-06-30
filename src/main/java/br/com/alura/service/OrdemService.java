@@ -11,9 +11,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,18 +29,22 @@ public class OrdemService {
     UsuarioRepository usuarioRepository;
 
     @Transactional
-    public void create(OrdemRequestDTO ordemDto) throws ApplicationServiceException {
+    public void create(SecurityContext securityContext, OrdemRequestDTO ordemDto) throws ApplicationServiceException {
         Usuario usuario = usuarioRepository.findById(ordemDto.userId());
-        if ( usuario == null) {
-            throw new IllegalArgumentException("Usuário não encontrado.!");
+        System.out.println(usuario);
+        if(usuario == null){
+            throw  new ApplicationServiceException("ordem.userId");
         }
+        if (!usuario.getUsername().equals(securityContext.getUserPrincipal().getName())){
+            throw new ApplicationServiceException("ordem.usernamediferenteusuario");
+        }
+
         Ordem ordem = new Ordem();
         ordem.setPreco(ordemDto.preco());
         ordem.setTipo(ordemDto.tipo());
         ordem.setData(LocalDate.now());
         ordem.setStatus("ENVIADA");
         ordem.setUserId(usuario);
-        System.out.println(usuario);
 
         try {
             ordemRespository.persist(ordem);

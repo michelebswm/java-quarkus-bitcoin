@@ -10,8 +10,10 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 
 @Path("/ordens")
 public class OrdemResource {
@@ -23,10 +25,11 @@ public class OrdemResource {
     @RolesAllowed("user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(OrdemRequestDTO ordem){
+    public Response create(@Context SecurityContext securityContext, OrdemRequestDTO ordem){
         try{
-            ordemService.create(ordem);
+            ordemService.create(securityContext, ordem);
         }catch (ApplicationServiceException ase){
+            System.out.println(ase.getMessage());
             return Response.status(ase.getStatusCode()).entity(new MessageService(ase.getMessage(),
                     ase.getErrorList())).build();
         }
