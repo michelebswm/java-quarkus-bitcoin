@@ -1,16 +1,20 @@
 package br.com.alura.service;
 
+import br.com.alura.dto.UsuarioResponseDTO;
 import br.com.alura.exception.ApplicationServiceException;
 import br.com.alura.model.Usuario;
 import br.com.alura.repository.UsuarioRepository;
 import br.com.alura.util.message.MessageService;
-import jakarta.annotation.security.PermitAll;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +47,25 @@ public class UsuarioService {
         }catch (Exception e){
             LOG.log(Level.SEVERE, "Erro na execucao do UsuarioService: incluir", e);
             throw new ApplicationServiceException("usuario.erro", new String[]{"incluir"});
+        }
+    }
+
+    public List<Usuario> listar(Page page, Sort sort) throws ApplicationServiceException {
+        try {
+            return usuarioRepository.findAll(sort).page(page).list();
+        }catch (Exception e){
+            LOG.log(Level.SEVERE,"Erro na execucao do UsuarioService: listar", e);
+            throw new ApplicationServiceException("usuario.erro",
+                    new String[] { "listar" }, Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+        }
+    }
+
+    public Long obterQuantidade() throws ApplicationServiceException {
+        try{
+            return usuarioRepository.count();
+        }catch (Exception e){
+            throw new ApplicationServiceException("usuario.erro", new String[] { "obterQuantidade" },
+                    Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         }
     }
 }
