@@ -6,6 +6,7 @@ import io.quarkus.security.jpa.Roles;
 import io.quarkus.security.jpa.UserDefinition;
 import io.quarkus.security.jpa.Username;
 import io.smallrye.common.constraint.NotNull;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -87,6 +88,7 @@ public class Usuario {
         this.username = username;
     }
 
+    @JsonbTransient
     public String getPassword() {
         return password;
     }
