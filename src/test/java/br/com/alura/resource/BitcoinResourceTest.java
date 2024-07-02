@@ -9,6 +9,6 @@ public class BitcoinResourceTest {
     @Test
     public void testarStatusCode200(){
         RestAssured
-                .given().get("bitcoins").then().statusCode(200);
+                .given().get("/api/bitcoins").then().statusCode(200);
     }
 }
