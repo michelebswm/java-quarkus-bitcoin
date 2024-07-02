@@ -19,7 +19,7 @@ public class UsuarioResponseDTO implements Serializable {
 
     public UsuarioResponseDTO(){}
 
-    //Construtor que transforma um objeto Entity em um objeto
+    //Construtor que transforma um objeto Entity em um objeto DTO
     public UsuarioResponseDTO(Usuario usuario) {
         this.id = usuario.getId();
         this.nome = usuario.getNome();
@@ -28,7 +28,7 @@ public class UsuarioResponseDTO implements Serializable {
         this.role = usuario.getRole();
     }
 
-    //Construtor que transforma um objeto Entity em um objeto
+    //Transforma um objeto DTO em um objeto Entity
     public Usuario toEntity(){
         Usuario user = new Usuario();
         user.setId(id);

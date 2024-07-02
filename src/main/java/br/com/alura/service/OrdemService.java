@@ -7,6 +7,8 @@ import br.com.alura.model.Usuario;
 import br.com.alura.repository.OrdemRespository;
 import br.com.alura.repository.UsuarioRepository;
 import br.com.alura.util.message.MessageService;
+import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -15,6 +17,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +61,25 @@ public class OrdemService {
             System.out.println(e.getMessage());
             LOG.log(Level.SEVERE, "Erro na execucao do OrdemService: incluir", e);
             throw new ApplicationServiceException("ordem.erro", new String[]{"incluir"});
+        }
+    }
+
+    public List<Ordem> listar(Page page, Sort sort) throws ApplicationServiceException {
+        try{
+            return ordemRespository.findAll(sort).page(page).list();
+        }catch (Exception e){
+            LOG.log(Level.SEVERE, "Erro na execucão do OrdemService: listar", e);
+            throw new ApplicationServiceException("ordem.erro",
+                    new String[] { "listar" }, Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+        }
+    }
+
+    public Long obterQuantidade() throws ApplicationServiceException {
+        try{
+            return ordemRespository.count();
+        }catch (Exception e){
+            throw new ApplicationServiceException("ordem.erro", new String[] { "obterQuantidade" },
+                    Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         }
     }
 }
