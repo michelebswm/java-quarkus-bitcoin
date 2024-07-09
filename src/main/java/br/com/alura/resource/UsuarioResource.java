@@ -56,4 +56,29 @@ public class UsuarioResource {
             return Response.status(ase.getStatusCode()).entity(new MessageService(ase.getMessage(), ase.getErrorList())).build();
         }
     }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response alterar(Usuario usuario){
+        try{
+            usuarioService.alterar(usuario);
+        } catch (ApplicationServiceException ase) {
+            return Response.status(ase.getStatusCode()).entity(
+                    new MessageService(ase.getMessage(), ase.getErrorList())).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response excluir(@PathParam("id") Long id){
+        try {
+            usuarioService.excluir(id);
+        } catch (ApplicationServiceException ase) {
+            return Response.status(ase.getStatusCode()).entity(new MessageService(ase.getMessage(), ase.getErrorList())).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 }

@@ -1,5 +1,6 @@
 package br.com.alura.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.jpa.Password;
 import io.quarkus.security.jpa.Roles;
@@ -10,6 +11,7 @@ import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @UserDefinition
@@ -52,6 +54,10 @@ public class Usuario {
     @Roles
     private String role;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
+    private Set<Ordem> ordens;
+
     public Usuario(){
 
     }
@@ -88,9 +94,8 @@ public class Usuario {
         this.username = username;
     }
 
-    @JsonbTransient
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -111,6 +116,14 @@ public class Usuario {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Ordem> getOrdens() {
+        return ordens;
+    }
+
+    public void setOrdens(Set<Ordem> ordens) {
+        this.ordens = ordens;
     }
 
     public static String validaUsername(String username){
