@@ -1,62 +1,42 @@
-# bitcoin
+# Projeto quarkus
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Este é um projeto de exemplo usando Quarkus Java Framework.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+Se quiser saber mais sobre o Quarkus, visite o site: https://quarkus.io/.
 
-## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+## Executando o aplicativo em desenvolvimento (dev)
 
-```shell script
-./mvnw compile quarkus:dev
+Você pode executar seu aplicativo no modo dev, que permite a codificação ao vivo (reativa) usando:
 ```
+./mvn quarkus:dev
+```     
+## Empacotando e executando o aplicativo
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+A aplicação é empacotável usando `./mvnw package`.
+Ele produz o arquivo executável `pr-quarkus-exemplo-1.0.0-runner.jar` no diretório` /target`.
+Esteja ciente de que não é um _über-jar_, pois as dependências são copiadas no diretório `target/lib`.
 
-## Packaging and running the application
+O aplicativo agora pode ser executado usando `java -jar target/pr-quarkus-exemplo-1.0.0-runner.jar`
 
-The application can be packaged using:
+## Criando um executável nativo
 
-```shell script
-./mvnw package
-```
+Você pode criar um executável nativo usando: `./mvnw package -Pnative`.
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Ou você pode usar o Docker para criar o executável nativo usando: `./mvnw package -Pnative -Dquarkus.native.container-build = true`.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+Você pode então executar o seu binário: `. /target/pr-quarkus-exemplo-1.0.0-runner`
 
-If you want to build an _über-jar_, execute the following command:
+Se você quiser saber mais sobre a criação de executáveis ​​nativos, consulte https://quarkus.io/guides/building-native-image-guide.
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+## API Swagger
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+Você pode visualiar a API através da interface gráfica do swagger acessando:
 
-## Creating a native executable
+http://localhost:8080/swagger-ui
 
-You can create a native executable using:
+Para fazer download do arquivo (swagger) acesse:
 
-```shell script
-./mvnw package -Dnative
-```
+http://localhost:8080/openapi
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/bitcoin-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+Você pode alterar as configurações no arquivo `application.properties`
